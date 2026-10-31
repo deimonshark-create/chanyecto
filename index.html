@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz de Parasitología · Enfermedades parasitarias</title>
+  <meta name="description" content="Cuestionario interactivo para memorizar literalmente las 25 enfermedades del PDF Enfermedad.pdf de Parasitología.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= CABECERA ================= -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">25</div>
+        <div class="brand-text">
+          <p class="eyebrow">Parasitología · Enfermedades</p>
+          <h1>Quiz de memorización</h1>
+        </div>
+      </div>
+      <div class="topbar-side">
+        <p class="topbar-note">Texto e imágenes del PDF original · 25 fichas</p>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-help" aria-expanded="false" aria-controls="help-box">¿Cómo se evalúa?</button>
+      </div>
+    </div>
+    <div class="help-box" id="help-box" hidden>
+      <p><strong>Verificación estricta:</strong> cada respuesta se compara con el texto literal del PDF. Debes escribir las mismas palabras, en el mismo orden y sin omitir elementos.</p>
+      <p>Se ignoran únicamente las mayúsculas, las tildes y los signos de puntuación. No se aceptan sinónimos, abreviaturas distintas ni respuestas incompletas.</p>
+      <p>Las 25 fichas tienen los 4 apartados: enfermedad, agente causal, síntomas y tratamiento. Cada apartado vale 1 punto; el total del quiz es sobre 100.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ================= ESTADO ================= -->
+    <section class="statusbar" aria-label="Progreso del quiz">
+      <div class="progress">
+        <div class="progress-top">
+          <span id="p-question">Pregunta 1 de 25</span>
+          <span id="p-percent">Avance 10%</span>
+        </div>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del quiz">
+          <div class="bar-fill" id="p-bar"></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat stat-ok">
+          <span class="stat-label">Aciertos</span>
+          <span class="stat-value" id="s-ok">0</span>
+        </div>
+        <div class="stat stat-bad">
+          <span class="stat-label">Errores</span>
+          <span class="stat-value" id="s-bad">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Sin resolver</span>
+          <span class="stat-value" id="s-pending">100</span>
+        </div>
+        <div class="stat stat-score">
+          <span class="stat-label">Puntuación</span>
+          <span class="stat-value"><span id="s-score">0</span><span class="stat-max">/100</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section class="quiz" id="quiz">
+      <div class="quiz-grid">
+
+        <!-- Columna izquierda: imagen -->
+        <aside class="media">
+          <div class="media-frame" id="media-frame" role="button" tabindex="0" aria-label="Ampliar imagen de la ficha">
+            <img id="q-image" src="assets/img/fichas/ficha-01.jpg" alt="Imagen de la ficha correspondiente a la pregunta actual">
+            <span class="zoom-hint" aria-hidden="true">Ampliar</span>
+          </div>
+          <div class="media-meta">
+            <span class="pill">Ficha <b id="q-page">1</b></span>
+            <span class="media-note">Imagen original del PDF</span>
+          </div>
+        </aside>
+
+        <!-- Columna derecha: respuestas -->
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-titles">
+              <p class="panel-kicker" id="q-lamina">Ficha 1</p>
+              <h2 id="q-indicator">Pregunta 1 de 25</h2>
+            </div>
+            <div class="qmap" id="qmap" role="group" aria-label="Mapa de preguntas"></div>
+          </div>
+
+          <form id="answer-form" autocomplete="off" onsubmit="return false;">
+            <div class="fields" id="fields"></div>
+          </form>
+
+          <div class="actions">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-verify">
+              Verificar respuestas
+            </button>
+            <div class="actions-row">
+              <button type="button" class="btn btn-ghost" id="btn-prev">Pregunta anterior</button>
+              <button type="button" class="btn btn-ghost" id="btn-next">Siguiente pregunta</button>
+              <button type="button" class="btn btn-ghost" id="btn-retry">Reintentar</button>
+              <button type="button" class="btn btn-outline" id="btn-finish">Finalizar quiz</button>
+            </div>
+            <p class="keyhint">Consejo: <kbd>Ctrl</kbd> + <kbd>Enter</kbd> verifica las respuestas.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RESULTADOS ================= -->
+    <section class="results" id="results" hidden aria-live="polite">
+      <div class="result-card">
+
+        <p class="eyebrow">Resultado final</p>
+        <div class="grade">
+          <span id="r-grade">0</span><span class="grade-max">/100</span>
+        </div>
+        <p class="grade-caption">Calificación final del quiz</p>
+
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="result-label">Respuestas correctas</span>
+            <span class="result-value ok" id="r-ok">0 / 100</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Respuestas incorrectas</span>
+            <span class="result-value bad" id="r-bad">0 / 100</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Porcentaje de aciertos</span>
+            <span class="result-value" id="r-pct">0%</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Preguntas completas</span>
+            <span class="result-value" id="r-questions">0 / 25</span>
+          </div>
+        </div>
+
+        <div class="review">
+          <h2>Enfermedades por repasar</h2>
+          <p class="review-hint">En cada apartado fallado verás lo que escribiste y la respuesta correcta del PDF.</p>
+          <p class="review-message" id="r-message" hidden></p>
+          <ul class="review-list" id="r-review"></ul>
+        </div>
+
+        <div class="review review-correct" id="r-correct-block" hidden>
+          <h2>Preguntas correctas</h2>
+          <p class="review-hint">Respondiste bien los cuatro apartados. Este es el texto del PDF.</p>
+          <ul class="review-list correct-list" id="r-correct-list"></ul>
+        </div>
+
+        <div class="actions-row result-actions">
+          <button type="button" class="btn btn-primary" id="btn-review-answers">Revisar respuestas</button>
+          <button type="button" class="btn btn-ghost" id="btn-restart">Reiniciar quiz</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Basado exclusivamente en <em>Enfermedad.pdf</em>. Las respuestas se muestran con la redacción y ortografía originales del documento.</p>
+  </footer>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-text" hidden>
+  <div class="modal-card">
+    <h2 class="modal-title">Finalizar quiz</h2>
+    <p id="modal-text"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="modal-cancel">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="modal-ok">Sí, finalizar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Visor de imagen -->
+<div class="lightbox" id="lightbox" hidden>
+  <img id="lightbox-img" src="" alt="">
+  <p class="lightbox-close">Haz clic o pulsa <kbd>Esc</kbd> para cerrar</p>
+</div>
+
+<!-- Aviso flotante -->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  (function () {
+    var btn = document.getElementById('btn-help');
+    var box = document.getElementById('help-box');
+    btn.addEventListener('click', function () {
+      var abierto = !box.hidden;
+      box.hidden = abierto;
+      btn.setAttribute('aria-expanded', String(!abierto));
+    });
+  })();
+</script>
+
+</body>
+</html>
